@@ -63,7 +63,7 @@
 - name: Check if X-Windows Desktop is running
   shell: "echo $XDG_CURRENT_DESKTOP"
   register: xdesktop
-  when: xdesktop_defined.xdesktop_exists == false
+  when: xdesktop_exists == false
 
 - name: Remove unneeded packages.
   apt:
