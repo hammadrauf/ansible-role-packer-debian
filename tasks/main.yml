@@ -82,7 +82,7 @@
       - libx11-6
       - libxext6
     state: absent
-  when: xdesktop is undefined
+  when: xdesktop | length == 0
 
 - name: Remove unneeded packages (by regex).
   shell: "apt-get -y remove '.*-dev$'"
