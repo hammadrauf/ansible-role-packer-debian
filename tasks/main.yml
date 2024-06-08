@@ -55,6 +55,16 @@
   when: vmware_check.stdout | int > 0
 
 # Cleanup tasks.
+- name: Check if X-Desktop is defined
+  register: xdesktop_defined
+  ansible.builtin.set_fact:
+    xdesktop_exists: "{{ xdesktop is defined }}"
+
+- name: Check if X-Windows Desktop is running
+  shell: "echo $XDG_CURRENT_DESKTOP"
+  register: xdesktop
+  when: xdesktop_defined.xdesktop_exists == false
+
 - name: Remove unneeded packages.
   apt:
     name:
@@ -64,14 +74,15 @@
       - cpp
       - gcc
       - g++
-      #- libx11-data
-      #- xauth
-      #- libxmuu1
-      #- libxcb1
-      #- libx11-6
-      #- libxext6
-      - linux-source
+      - linux-source    
+      - libx11-data
+      - xauth
+      - libxmuu1
+      - libxcb1
+      - libx11-6
+      - libxext6
     state: absent
+  when: xdesktop is undefined
 
 - name: Remove unneeded packages (by regex).
   shell: "apt-get -y remove '.*-dev$'"
